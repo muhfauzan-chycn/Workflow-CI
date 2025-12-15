@@ -26,6 +26,7 @@ jobs:
           MLFLOW_TRACKING_URI: file://${{ github.workspace }}/mlruns
         run: |
           mkdir -p mlruns
+          mlflow experiments create --experiment-name Default || true
           mlflow run MLProject --env-manager=local
 
       - name: Upload MLflow artifacts
