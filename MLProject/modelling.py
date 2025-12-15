@@ -1,4 +1,9 @@
 import os
+
+# 🔥 FIX MLflow CI bug (WAJIB)
+os.environ.pop("MLFLOW_RUN_ID", None)
+os.environ.pop("MLFLOW_EXPERIMENT_ID", None)
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
