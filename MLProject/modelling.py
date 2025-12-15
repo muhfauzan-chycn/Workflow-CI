@@ -23,7 +23,6 @@ def main():
 
     acc = accuracy_score(y_test, model.predict(X_test))
 
-    
     mlflow.log_metric("accuracy", acc)
     mlflow.sklearn.log_model(model, "model")
 
