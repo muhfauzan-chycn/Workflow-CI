@@ -18,15 +18,16 @@ def main():
         X, y, test_size=0.2, random_state=42, stratify=y
     )
 
-    with mlflow.start_run(nested=True):
-        model = LogisticRegression(max_iter=1000)
-        model.fit(X_train, y_train)
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X_train, y_train)
 
-        acc = accuracy_score(y_test, model.predict(X_test))
-        mlflow.log_metric("accuracy", acc)
-        mlflow.sklearn.log_model(model, "model")
+    acc = accuracy_score(y_test, model.predict(X_test))
 
-        print("Accuracy:", acc)
+    
+    mlflow.log_metric("accuracy", acc)
+    mlflow.sklearn.log_model(model, "model")
+
+    print("Accuracy:", acc)
 
 if __name__ == "__main__":
     main()

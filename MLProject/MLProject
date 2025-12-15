@@ -1,6 +1,4 @@
-name: telco_churn_ci
-
-python_env: python_env.yaml
+name: telco-churn-project
 
 entry_points:
   main:
