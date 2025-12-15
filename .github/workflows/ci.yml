@@ -31,7 +31,9 @@ jobs:
 
       - name: Build Docker Image with MLflow
         run: |
-          mlflow build-docker MLProject \
+          RUN_ID=$(ls mlruns/0 | head -n 1)
+          mlflow models build-docker \
+            -m "runs:/$RUN_ID/model" \
             -n muhfuuzan/telco-churn-mlflow
 
       - name: Login to Docker Hub
