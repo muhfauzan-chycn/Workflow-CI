@@ -1,4 +1,8 @@
 import os
+import mlflow
+
+# 🔥 CI-safe experiment handling
+mlflow.set_experiment("telco-churn-ci")
 
 # 🔥 FIX MLflow CI bug (WAJIB)
 os.environ.pop("MLFLOW_RUN_ID", None)

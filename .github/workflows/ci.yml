@@ -24,24 +24,15 @@ jobs:
       - name: Run MLflow Project
         env:
           MLFLOW_TRACKING_URI: file://${{ github.workspace }}/mlruns
+          MLFLOW_EXPERIMENT_NAME: telco-churn-ci
         run: |
           mkdir -p mlruns
           mlflow run MLProject --env-manager=local
 
-      - name: Debug mlruns
-        run: |
-          echo "📂 Listing mlruns directory"
-          ls -R mlruns
-
       - name: Build Docker Image with MLflow
         run: |
           MODEL_PATH=$(find mlruns -type f -name "MLmodel" | head -n 1 | xargs dirname)
-          if [ -z "$MODEL_PATH" ]; then
-            echo "❌ MODEL_PATH not found"
-            exit 1
-          fi
-
-          echo "✅ Using model path: $MODEL_PATH"
+          echo "Using model path: $MODEL_PATH"
 
           mlflow models build-docker \
             -m "$MODEL_PATH" \
