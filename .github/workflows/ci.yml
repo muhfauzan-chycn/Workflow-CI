@@ -55,7 +55,7 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push muhfauzan/telco-churn-mlflow
+          docker push muhfuuzan/telco-churn-mlflow
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
