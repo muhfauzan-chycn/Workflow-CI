@@ -19,3 +19,6 @@ Setiap push ke branch `main` akan:
 ## Docker Image
 Image tersedia di Docker Hub:
 `muhfuuzan/telco-churn-mlflow`
+
+## CI/CD Flow
+Push → GitHub Actions → MLflow Training → Docker Image → Docker Hub
