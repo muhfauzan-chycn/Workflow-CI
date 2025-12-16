@@ -17,23 +17,31 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install MLflow & Docker deps
+      - name: Install dependencies
         run: |
           pip install mlflow docker
 
       - name: Run MLflow Project
         env:
           MLFLOW_TRACKING_URI: file://${{ github.workspace }}/mlruns
-          MLFLOW_EXPERIMENT_NAME: telco-churn-exp
         run: |
           mkdir -p mlruns
-          mlflow experiments create --experiment-name telco-churn-exp || true
           mlflow run MLProject --env-manager=local
+
+      - name: Debug mlruns
+        run: |
+          echo "📂 Listing mlruns directory"
+          ls -R mlruns
 
       - name: Build Docker Image with MLflow
         run: |
-          MODEL_PATH=$(find mlruns -type d -name "MLmodel" -print | head -n 1 | xargs dirname)
-          echo "Using model path: $MODEL_PATH"
+          MODEL_PATH=$(find mlruns -type f -name "MLmodel" | head -n 1 | xargs dirname)
+          if [ -z "$MODEL_PATH" ]; then
+            echo "❌ MODEL_PATH not found"
+            exit 1
+          fi
+
+          echo "✅ Using model path: $MODEL_PATH"
 
           mlflow models build-docker \
             -m "$MODEL_PATH" \
