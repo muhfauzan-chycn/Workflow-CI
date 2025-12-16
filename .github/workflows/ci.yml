@@ -24,8 +24,10 @@ jobs:
       - name: Run MLflow Project
         env:
           MLFLOW_TRACKING_URI: file://${{ github.workspace }}/mlruns
+          MLFLOW_EXPERIMENT_NAME: telco-churn-exp
         run: |
           mkdir -p mlruns
+          mlflow experiments create --experiment-name telco-churn-exp || true
           mlflow run MLProject --env-manager=local
 
       - name: Build Docker Image with MLflow
