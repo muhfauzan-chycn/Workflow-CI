@@ -24,27 +24,17 @@ jobs:
       - name: Run MLflow Project
         env:
           MLFLOW_TRACKING_URI: file://${{ github.workspace }}/mlruns
-          MLFLOW_EXPERIMENT_NAME: Default
         run: |
           mkdir -p mlruns
           mlflow run MLProject --env-manager=local
 
       - name: Build Docker Image with MLflow
         run: |
-          echo "📂 Listing mlruns directory"
-          ls -R mlruns
-
-          RUN_ID=$(find mlruns -mindepth 2 -maxdepth 2 -type d | head -n 1 | awk -F'/' '{print $3}')
-
-          if [ -z "$RUN_ID" ]; then
-            echo "❌ No MLflow run found"
-            exit 1
-          fi
-
-          echo "✅ Using RUN_ID=$RUN_ID"
+          MODEL_PATH=$(find mlruns -type d -name "MLmodel" -print | head -n 1 | xargs dirname)
+          echo "Using model path: $MODEL_PATH"
 
           mlflow models build-docker \
-            -m "runs:/$RUN_ID/model" \
+            -m "$MODEL_PATH" \
             -n muhfuuzan/telco-churn-mlflow
 
       - name: Login to Docker Hub
@@ -54,8 +44,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker Image
-        run: |
-          docker push muhfuuzan/telco-churn-mlflow
+        run: docker push muhfuuzan/telco-churn-mlflow
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
